@@ -26,10 +26,25 @@ public enum State {
 	CHOOSE_CATEGORY,
 
 	/**
+	 * The points for given category is max, so choose other category to add the points to
+	 */
+	CHOOSE_OTHER_CATEGORY,
+	
+	/**
 	 * Choose answer for question
 	 */
 	CHOOSE_ANSWER,
 
+	/**
+	 * Answer was correct
+	 */
+	CORRECT_ANSWER,
+	
+	/**
+	 * Answer by colliding player was incorrect (Colliding player is the player, that occupied the field)
+	 */
+	INCORRECT_ANSWER_COLLIDER,
+	
 	/**
 	 * 1-3 throws with a figure-movement following
 	 */
@@ -86,6 +101,12 @@ public enum State {
 			return "choose figure";
 		case CHOOSE_CATEGORY:
 			return "choose category";
+		case CHOOSE_OTHER_CATEGORY:
+			return "choose other category";
+		case CORRECT_ANSWER:
+			return "correct answer";
+		case INCORRECT_ANSWER_COLLIDER:
+			return "incorrect answer collider";
 		case CHOOSE_ANSWER:
 			return "choose answer";
 		case FAILURE:

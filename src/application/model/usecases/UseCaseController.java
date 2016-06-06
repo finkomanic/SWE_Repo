@@ -50,7 +50,6 @@ public class UseCaseController {
 		return game.getState();
 	}
 
-	
 	/**
 	 * Choose answer for given question.
 	 * @param i Answer-ID
@@ -58,6 +57,16 @@ public class UseCaseController {
 	 */
 	public State chooseAnswer(int i) {
 		game.chooseAnswer(i);
+		return game.getState();
+	}
+	
+	/**
+	 * Choose other category to add points to.
+	 * @param i Category-ID
+	 * @return State of game
+	 */
+	public State chooseOtherCategory(int i) {
+		game.chooseOtherCategory(i);
 		return game.getState();
 	}
 }

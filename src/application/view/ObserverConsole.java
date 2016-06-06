@@ -60,9 +60,14 @@ public class ObserverConsole implements IObserver {
 				new Thread() {
 					public void run() {
 						System.err.println("Thread: " + getName() + " running");
-						model.chooseFigure(0);
-						if (model.getState() == State.SUCCESS_COLLISION) {
+						if (model.getState().name().contains("COLLISION")) {
 							model.chooseCategory(0);
+						} else if (model.getState().name().contains("CHOOSE_ANSWER")) {
+							model.chooseAnswer(0);
+						} else if (model.getState().name().contains("CHOOSE_OTHER_CATEGORY")) {
+							model.chooseOtherCategory(0);
+						} else {
+							model.chooseFigure(0);
 						}
 					}
 				}.start();
@@ -71,8 +76,15 @@ public class ObserverConsole implements IObserver {
 				new Thread() {
 					public void run() {
 						System.err.println("Thread: " + getName() + " running");
-						model.chooseFigure(1);
-						model.chooseCategory(1);
+						if (model.getState().name().contains("COLLISION")) {
+							model.chooseCategory(1);
+						} else if (model.getState().name().contains("CHOOSE_ANSWER")) {
+							model.chooseAnswer(1);
+						} else if (model.getState().name().contains("CHOOSE_OTHER_CATEGORY")) {
+							model.chooseOtherCategory(1);
+						} else {
+							model.chooseFigure(1);
+						}
 					}
 				}.start();
 				break;
@@ -80,8 +92,15 @@ public class ObserverConsole implements IObserver {
 				new Thread() {
 					public void run() {
 						System.err.println("Thread: " + getName() + " running");
-						model.chooseFigure(2);
-						model.chooseCategory(2);
+						if (model.getState().name().contains("COLLISION")) {
+							model.chooseCategory(2);
+						} else if (model.getState().name().contains("CHOOSE_ANSWER")) {
+							model.chooseAnswer(2);
+						} else if (model.getState().name().contains("CHOOSE_OTHER_CATEGORY")) {
+							model.chooseOtherCategory(2);
+						} else {
+							model.chooseFigure(2);
+						}
 					}
 				}.start();
 				break;
@@ -89,7 +108,11 @@ public class ObserverConsole implements IObserver {
 				new Thread() {
 					public void run() {
 						System.err.println("Thread: " + getName() + " running");
-						model.chooseCategory(3);
+						if (model.getState().name().contains("COLLISION")) {
+							model.chooseCategory(3);
+						} else if (model.getState().name().contains("CHOOSE_OTHER_CATEGORY")) {
+							model.chooseOtherCategory(3);
+						}
 					}
 				}.start();
 				break;
@@ -146,11 +169,23 @@ public class ObserverConsole implements IObserver {
 			System.out
 					.println("One of your figures moved to the starting-field.");
 			System.out.println("You collided with " + collision.getColor() + "!");
-			System.out.println(collision.getColor() +" has to choose a category for the question! ((1)Sport (2)Politics (3)Movies (4)Music)");
+			System.out.println(collision.getColor() + " has to choose a category for the question! ((1)Sport (2)Politics (3)Movies (4)Music)");
 			break;
 		case CHOOSE_FIGURE:
 			System.out.println("You rolled a " + model.getLatestRoll() + "!");
 			System.out.println("Choose the figure to move!");
+			break;
+		case CHOOSE_ANSWER:
+			// print possible answers
+			System.out.println("Question for " + collision.getColor() + ": " + model.getQuestion());
+			System.out.println("Choose your answer!");
+			break;
+		case CORRECT_ANSWER:
+			System.out.println("Your answer was correct!");
+			break;
+		case CHOOSE_OTHER_CATEGORY:
+			System.out.println("Your answer was correct but you are expert in this category!");
+			System.out.println("Choose another category to add the points to! " + collision.getNonMaxCategories());
 			break;
 		case MOVE:
 			System.out.println("Your figure moved for " + model.getLatestRoll() + " fields.");
@@ -159,11 +194,6 @@ public class ObserverConsole implements IObserver {
 			System.out.println("Your figure moved for " + model.getLatestRoll() + " fields.");
 			System.out.println("You collided with " + collision.getColor() + "!");
 			System.out.println(collision.getColor() +" has to choose a category for the question! ((1)Sport (2)Politics (3)Movies (4)Music)");
-			break;
-		case CHOOSE_ANSWER:
-			// print possible answers
-			System.out.println("Question for " + collision.getColor() + ": " + model.getQuestion());
-			System.out.println("Choose your answer!");
 			break;
 		case RELEASE:
 			System.out.println("You rolled a " + model.getLatestRoll() + "!");
@@ -205,6 +235,8 @@ public class ObserverConsole implements IObserver {
 					sb.append(' ');
 				}
 			}
+			sb.append(" || ");
+			sb.append(players[i].getPoints());
 			sb.append('\n');
 		}
 		sb.append(">> It's " + model.getCurrentPlayer());

@@ -58,6 +58,12 @@ public interface IModel extends ISubject {
 	 * @param i Answer index
 	 */
 	public void chooseAnswer(int i);
+	
+	/**
+	 * Choose other category, to add the points to.
+	 * @param i Category-ID
+	 */
+	public void chooseOtherCategory(int i);
 
 	/**
 	 * Exit the game.

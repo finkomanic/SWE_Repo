@@ -31,9 +31,12 @@ public class Game {
 	private State state;
 	
 	// currently asked question
-	private String question;
+	private int currentCategory;
+	private String currentQuestion;
 	private String possibleAnswers;
+	private String currentAnswer;
 	private String correctAnswer;
+	private int movedFigure;
 
 	/**
 	 * Constructs a new game.
@@ -128,6 +131,7 @@ public class Game {
 			setNextPlayer();
 			state = State.MOVE;
 		} else {
+			movedFigure = i;
 			state = State.MOVE_COLLISION;
 		}
 	}
@@ -137,14 +141,48 @@ public class Game {
 	 * @param i Category-ID (1-4)
 	 */
 	public void chooseCategory(int i) {
-		question = questions.getQuestion(i);
-		possibleAnswers = questions.getPossibleAnswers(question);
-		correctAnswer = questions.getCorrectAnswer(question);		
+		currentCategory = i;
+		currentQuestion = questions.getQuestion(i);
+		possibleAnswers = questions.getPossibleAnswers(currentQuestion);
+		correctAnswer = questions.getCorrectAnswer(currentQuestion);		
 		state = State.CHOOSE_ANSWER;
 	}
 	
+	/**
+	 * Choose answer
+	 * @param i Answer-id
+	 */
 	public void chooseAnswer(int i) {
-		
+		currentAnswer = questions.getAnswer(currentQuestion, i);
+		if (currentAnswer == correctAnswer)
+		{
+			state = State.CORRECT_ANSWER;
+			board.restore(collision.getID(), movedFigure);
+			if (collision.addPoints(currentCategory) == false) {
+				state = State.CHOOSE_OTHER_CATEGORY;
+			}
+		}
+		else
+		{
+			collision.removePoints(currentCategory);
+			if (collision.getID() != currentPlayer) {
+				this.collision = players[currentPlayer];
+				state = State.INCORRECT_ANSWER_COLLIDER;
+			}
+		}
+	}
+	
+	/**
+	 * Add points to given category-id.
+	 * @param i Category-id
+	 */
+	public void chooseOtherCategory(int i) {
+		if (collision.addPoints(i) == false) {
+			state = State.CHOOSE_OTHER_CATEGORY;
+		} else {
+			setNextPlayer();
+			state = State.CORRECT_ANSWER;
+		}
 	}
 
 	/**
@@ -250,7 +288,7 @@ public class Game {
 	 * @return current question with possible answers
 	 */
 	public String getQuestion() {
-		return question + " " + possibleAnswers;
+		return currentQuestion + " " + possibleAnswers;
 	}
 
 	/**

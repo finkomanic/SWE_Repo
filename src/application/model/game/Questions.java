@@ -90,6 +90,11 @@ public class Questions {
 		return sb.toString();
 	}
 	
+	public String getAnswer(String question, int i)
+	{
+		return answers.get(question)[i];
+	}
+	
 	public String getCorrectAnswer(String question) {
 		return answers.get(question)[AMOUNT_OF_ANSWERS - 1];
 	}

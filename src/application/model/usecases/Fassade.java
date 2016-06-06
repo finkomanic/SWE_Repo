@@ -41,7 +41,7 @@ public class Fassade extends Subject implements IModel {
 	public void rollDice() {
 		if (game.getState() == State.FIRST_ROLL || game.getState() == State.FAILURE
 				|| game.getState() == State.SUCCESS || game.getState() == State.MOVE
-				|| game.getState() == State.RELEASE) {
+				|| game.getState() == State.RELEASE || game.getState() == State.CORRECT_ANSWER) {
 			notifyObservers(ucc.rollDice());
 		} else {
 			notifyObservers(State.WRONG_INPUT);
@@ -81,7 +81,18 @@ public class Fassade extends Subject implements IModel {
 			notifyObservers(State.WRONG_INPUT);
 		}
 	}
-
+	
+	/**
+	 * Choose other category to add the points to
+	 */
+	public void chooseOtherCategory(int i) {
+		if (game.getState() == State.CHOOSE_OTHER_CATEGORY && i < 4 && i > -1) {
+			notifyObservers(ucc.chooseOtherCategory(i));
+		} else {
+			notifyObservers(State.WRONG_INPUT);
+		}		
+	}
+	
 	public void exit() {
 		System.exit(0);
 	}

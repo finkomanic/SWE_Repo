@@ -23,6 +23,10 @@ public class Board {
 		}
 	}
 
+	public void removeFigure() {
+		return;
+	}
+
 	/**
 	 * Moves a figure on given position for num fields.
 	 * @param position Position, the figure is on
@@ -66,44 +70,49 @@ public class Board {
 
 	/**
 	 * Releases a figure from the homebase to the field.
-	 * @param playerNr Player-ID, that releases the figure
+	 * @param currentPlayer Player-ID, that releases the figure
 	 */
-	public void release(int playerNr) {
+	public void release(int currentPlayer) {
 		int index = -1;
 		for (int i = 0; i < 3; i++) {
-			if (homes[playerNr][i].getFigure() != null) {
+			if (homes[currentPlayer][i].getFigure() != null) {
 				index = i;
 			}
 		}
-		circle[playerNr * 12].setFigure(homes[playerNr][index].getFigure());
-		homes[playerNr][index].removeFigure();
+		circle[currentPlayer * 12].setFigure(homes[currentPlayer][index].getFigure());
+		homes[currentPlayer][index].removeFigure();
 	}
 
 	/**
 	 * Returns the striked player, if the release would result in a collision.
-	 * @param playerNr ID of the player, thats figure will be released
+	 * @param currentPlayer ID of the player, thats figure will be released
 	 * @return Player-ID of the striked player or null, if no collision occured
 	 */
-	public Player releaseCollisionDetection(int playerNr) {
+	public Player releaseCollisionDetection(int currentPlayer) {
 		Player ret = null;
-		if (circle[playerNr * 12].getFigure() != null) {
-			ret = circle[playerNr * 12].getFigure().getOwner();
+		if (circle[currentPlayer * 12].getFigure() != null) {
+			ret = circle[currentPlayer * 12].getFigure().getOwner();
 		}
 		return ret;
 	}
 
 	/**
-	 * Moves a figure back to its homebase.
+	 * Moves a figure back to starting-field or homebase if it's occupied.
 	 * @param figure Figure to move back
 	 */
-	public void restore(Figure figure) {
-		circle[getIndex(figure)].removeFigure();
-		boolean done = false;
-		for (int i = 0; i < 3 && !done; i++) {
-			if (homes[figure.getOwner().getID()][i] == null) {
-				homes[figure.getOwner().getID()][i].setFigure(figure);
-				done = true;
+	public void restore(int currentPlayer, int figID) {
+		Figure figure = circle[figID].getFigure();
+		boolean ret = false;
+		if (circle[currentPlayer * 12].getFigure() != null 
+				&& circle[currentPlayer * 12].getFigure().getOwner().getID() == currentPlayer) {
+			for (int i = 0; i < 3 && !ret; i++) {
+				if (homes[figure.getOwner().getID()][i] == null) {
+					homes[figure.getOwner().getID()][i].setFigure(figure);
+					ret = true;
+				}
 			}
+		} else {
+			circle[currentPlayer * 12].setFigure(figure);
 		}
 	}
 
