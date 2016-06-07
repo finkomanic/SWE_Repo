@@ -60,7 +60,8 @@ public class ObserverConsole implements IObserver {
 				new Thread() {
 					public void run() {
 						System.err.println("Thread: " + getName() + " running");
-						if (model.getState().name().contains("COLLISION")) {
+						if (model.getState().name().contains("COLLISION") 
+								|| model.getState().name().contains("INCORRECT_ANSWER_COLLIDER")) {
 							model.chooseCategory(0);
 						} else if (model.getState().name().contains("CHOOSE_ANSWER")) {
 							model.chooseAnswer(0);
@@ -76,7 +77,8 @@ public class ObserverConsole implements IObserver {
 				new Thread() {
 					public void run() {
 						System.err.println("Thread: " + getName() + " running");
-						if (model.getState().name().contains("COLLISION")) {
+						if (model.getState().name().contains("COLLISION")
+								|| model.getState().name().contains("INCORRECT_ANSWER_COLLIDER")) {
 							model.chooseCategory(1);
 						} else if (model.getState().name().contains("CHOOSE_ANSWER")) {
 							model.chooseAnswer(1);
@@ -92,7 +94,8 @@ public class ObserverConsole implements IObserver {
 				new Thread() {
 					public void run() {
 						System.err.println("Thread: " + getName() + " running");
-						if (model.getState().name().contains("COLLISION")) {
+						if (model.getState().name().contains("COLLISION")
+								|| model.getState().name().contains("INCORRECT_ANSWER_COLLIDER")) {
 							model.chooseCategory(2);
 						} else if (model.getState().name().contains("CHOOSE_ANSWER")) {
 							model.chooseAnswer(2);
@@ -108,10 +111,13 @@ public class ObserverConsole implements IObserver {
 				new Thread() {
 					public void run() {
 						System.err.println("Thread: " + getName() + " running");
-						if (model.getState().name().contains("COLLISION")) {
+						if (model.getState().name().contains("COLLISION")
+								|| model.getState().name().contains("INCORRECT_ANSWER_COLLIDER")) {
 							model.chooseCategory(3);
 						} else if (model.getState().name().contains("CHOOSE_OTHER_CATEGORY")) {
 							model.chooseOtherCategory(3);
+						} else {
+							System.out.println("The command has to fit to current state!");
 						}
 					}
 				}.start();
@@ -135,7 +141,7 @@ public class ObserverConsole implements IObserver {
 			}
 			
 			if (model.getWinner() != null) {
-				this.getScoreboard();
+				System.out.println(this.getScoreboard());
 				System.out.println("Game is over. " + model.getWinner() + " has won the game!");
 				System.exit(0);
 			}
@@ -145,6 +151,7 @@ public class ObserverConsole implements IObserver {
 	public void update(State state) {
 		ArrayList<Integer> latestRolls = model.getLatestRolls();
 		Player collision = model.getCollision();
+		Player currentPlayer = model.getCurrentPlayer();
 		System.out.println();
 		switch (state) {
 		case SET_PLAYERS:
@@ -175,14 +182,13 @@ public class ObserverConsole implements IObserver {
 			System.out
 					.println("One of your figures moved to the starting-field.");
 			System.out.println("You collided with " + collision.getColor() + "!");
-			System.out.println(collision.getColor() + " has to choose a category for the question! ((1)Sport (2)Politics (3)Movies (4)Music)");
+			System.out.println(collision.getColor() + " has to choose a category for the question! " + model.getCategories());
 			break;
 		case CHOOSE_FIGURE:
 			System.out.println("You rolled a " + model.getLatestRoll() + "!");
 			System.out.println("Choose the figure to move!");
 			break;
 		case CHOOSE_ANSWER:
-			// print possible answers
 			System.out.println("Question for " + collision.getColor() + ": " + model.getQuestion());
 			System.out.println("Choose your answer!");
 			break;
@@ -199,7 +205,15 @@ public class ObserverConsole implements IObserver {
 		case MOVE_COLLISION:
 			System.out.println("Your figure moved for " + model.getLatestRoll() + " fields.");
 			System.out.println("You collided with " + collision.getColor() + "!");
-			System.out.println(collision.getColor() +" has to choose a category for the question! ((1)Sport (2)Politics (3)Movies (4)Music)");
+			System.out.println(collision.getColor() +" has to choose a category for the question! " + model.getCategories());
+			break;
+		case INCORRECT_ANSWER_COLLIDER:
+			System.out.println("Your answer was incorrect!");
+			System.out.println(currentPlayer.getColor() +" has to choose a category for the question! " + model.getCategories());
+			break;
+		case INCORRECT_ANSWER_CURRENT_PLAYER:
+			System.out.println("Your answer was incorrect!");
+			System.out.println("Your figure got moved to your home. Next players turn!");
 			break;
 		case RELEASE:
 			System.out.println("You rolled a " + model.getLatestRoll() + "!");
@@ -211,7 +225,7 @@ public class ObserverConsole implements IObserver {
 			System.out
 					.println("One of your figures moved to the starting-field.");
 			System.out.println("You collided with " + collision.getColor() + "!");
-			System.out.println(collision.getColor() +" has to choose a category for the question! ((1)Sport (2)Politics (3)Movies (4)Music)");
+			System.out.println(collision.getColor() +" has to choose a category for the question! " + model.getCategories());
 			break;
 		default:
 			System.out.println("The command has to fit to current state!");

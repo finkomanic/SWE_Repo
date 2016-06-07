@@ -120,11 +120,10 @@ public class Board {
 		int position = getPositions(playerID).get(figID);
 		Figure figure = circle[position].getFigure();
 		circle[position].removeFigure();
-		int id = circle[playerID * 12].getFigure().getOwner().getID();
 				
 		if (circle[playerID * 12].getFigure() != null 
 				&& circle[playerID * 12].getFigure().getOwner().getID() == playerID) {
-			for (int i = 0; i < 3 && !ret; i++) {
+			for (int i = 0; i < homes.length && !ret; i++) {
 				if (homes[figure.getOwner().getID()][i] == null) {
 					homes[figure.getOwner().getID()][i].setFigure(figure);
 					ret = true;
@@ -133,6 +132,25 @@ public class Board {
 		} else {
 			circle[playerID * 12].setFigure(figure);
 		}	
+	}
+	
+	/**
+	 * Restors given figure to homebase.
+	 * @param playerID Player-ID
+	 * @param figID Figure-ID
+	 */
+	public void restoreToHome(int playerID, int figID) {
+		boolean ret = false; 
+		int position = getPositions(playerID).get(figID);
+		Figure figure = circle[position].getFigure();
+		circle[position].removeFigure();
+
+		for (int i = 0; i < homes.length && !ret; i++) {
+			if (homes[figure.getOwner().getID()][i] == null) {
+				homes[figure.getOwner().getID()][i].setFigure(figure);
+				ret = true;
+			}
+		}
 	}
 
 	/**

@@ -136,4 +136,10 @@ public interface IModel extends ISubject {
 	 * @return The winner, otherwise null
 	 */
 	public Player getWinner();
+	
+	/**
+	 * Get String-representation of categories.
+	 * @return String-representation of categories with IDs
+	 */
+	public String getCategories();
 }

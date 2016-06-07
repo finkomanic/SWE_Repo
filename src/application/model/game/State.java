@@ -46,6 +46,11 @@ public enum State {
 	INCORRECT_ANSWER_COLLIDER,
 	
 	/**
+	 * Answer by current player was incorrect
+	 */
+	INCORRECT_ANSWER_CURRENT_PLAYER,
+	
+	/**
 	 * 1-3 throws with a figure-movement following
 	 */
 	SUCCESS,
@@ -107,6 +112,8 @@ public enum State {
 			return "Correct answer";
 		case INCORRECT_ANSWER_COLLIDER:
 			return "Incorrect answer collider";
+		case INCORRECT_ANSWER_CURRENT_PLAYER:
+			return "Incorrect answer current player";
 		case CHOOSE_ANSWER:
 			return "Choose answer";
 		case FAILURE:

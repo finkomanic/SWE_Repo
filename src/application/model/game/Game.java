@@ -37,7 +37,8 @@ public class Game {
 	private String currentAnswer;
 	private String correctAnswer;
 	private int collidedFigureID;
-
+	private int movedFigureID;
+	
 	/**
 	 * Constructs a new game.
 	 */
@@ -169,6 +170,8 @@ public class Game {
 			collidedFigureID = board.getFigureID(collision.getID(), (getPositionsMove().get(i) + latestRoll));
 			state = State.MOVE_COLLISION;
 		}
+		
+		movedFigureID = i;
 	}
 	
 	/**
@@ -189,20 +192,34 @@ public class Game {
 	 */
 	public void chooseAnswer(int i) {
 		currentAnswer = questions.getAnswer(currentQuestion, i);
-		if (currentAnswer == correctAnswer)
-		{
+		if (currentAnswer == correctAnswer) {
+			// correct
 			state = State.CORRECT_ANSWER;
-			board.restore(collision.getID(), collidedFigureID);
+			if (collision.getID() != currentPlayer) {
+				// collider got asked -> restore collider
+				board.restore(collision.getID(), collidedFigureID);
+			} else {
+				// current player got asked -> questioning finished
+				setNextPlayer();
+			}
 			if (collision.addPoints(currentCategory) == false) {
+				// points for current category are max
 				state = State.CHOOSE_OTHER_CATEGORY;
 			}
-		}
-		else
-		{
+		} else {
+			// incorrect -> remove points
 			collision.removePoints(currentCategory);
 			if (collision.getID() != currentPlayer) {
-				this.collision = players[currentPlayer];
+				// collider got asked -> restore collider
+				board.restore(collision.getID(), collidedFigureID);
+				// set collider to current player
+				collision = players[currentPlayer];
 				state = State.INCORRECT_ANSWER_COLLIDER;
+			} else {
+				// return current player to home
+				board.restoreToHome(currentPlayer, movedFigureID);
+				setNextPlayer();
+				state = State.INCORRECT_ANSWER_CURRENT_PLAYER;
 			}
 		}
 	}
@@ -348,6 +365,10 @@ public class Game {
 		}
 		
 		return winner;
+	}
+	
+	public String getCategories() {
+		return this.questions.getCategories();
 	}
 
 	@Override

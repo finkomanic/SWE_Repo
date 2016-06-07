@@ -41,7 +41,8 @@ public class Fassade extends Subject implements IModel {
 	public void rollDice() {
 		if (game.getState() == State.FIRST_ROLL || game.getState() == State.FAILURE
 				|| game.getState() == State.SUCCESS || game.getState() == State.MOVE
-				|| game.getState() == State.RELEASE || game.getState() == State.CORRECT_ANSWER) {
+				|| game.getState() == State.RELEASE || game.getState() == State.CORRECT_ANSWER
+				|| game.getState() == State.INCORRECT_ANSWER_CURRENT_PLAYER) {
 			notifyObservers(ucc.rollDice());
 		} else {
 			notifyObservers(State.WRONG_INPUT);
@@ -64,7 +65,8 @@ public class Fassade extends Subject implements IModel {
 	 */
 	public void chooseCategory(int i) {
 		if ((game.getState() == State.MOVE_COLLISION || game.getState() == State.RELEASE_COLLISION 
-				|| game.getState() == State.SUCCESS_COLLISION) && i < 4 && i > -1) {
+				|| game.getState() == State.SUCCESS_COLLISION 
+				|| game.getState() == State.INCORRECT_ANSWER_COLLIDER) && i < 4 && i > -1) {
 			notifyObservers(ucc.chooseCategory(i));
 		} else {
 			notifyObservers(State.WRONG_INPUT);
@@ -139,5 +141,9 @@ public class Fassade extends Subject implements IModel {
 	
 	public Player getWinner() {
 		return game.getWinner();
+	}
+	
+	public String getCategories() {
+		return game.getCategories();
 	}
 }

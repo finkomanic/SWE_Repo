@@ -99,4 +99,8 @@ public class Questions {
 	public String getCorrectAnswer(String question) {
 		return answers.get(question)[AMOUNT_OF_ANSWERS - 1];
 	}
+	
+	public String getCategories() {
+		return "(1)Sport (2)Politics (3)Movies (4)Music";
+	}
 }
