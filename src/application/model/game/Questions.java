@@ -83,7 +83,8 @@ public class Questions {
 	
 	public String getPossibleAnswers(String question) {
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < AMOUNT_OF_ANSWERS; i++) {
+		
+		for (int i = 0; i < AMOUNT_OF_ANSWERS - 1; i++) {
 			sb.append("(" + (i+1) + ")" + answers.get(question)[i] + " ");
 		}
 		

@@ -136,4 +136,8 @@ public class Fassade extends Subject implements IModel {
 	public String getQuestion() {
 		return game.getQuestion();
 	}
+	
+	public Player getWinner() {
+		return game.getWinner();
+	}
 }

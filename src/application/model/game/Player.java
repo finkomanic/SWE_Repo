@@ -38,6 +38,13 @@ public class Player {
 		return added;
 	}
 	
+	public void setTestPoints(int cat1, int cat2, int cat3, int cat4) {
+		points[0] = cat1;
+		points[1] = cat2;
+		points[2] = cat3;
+		points[3] = cat4;
+	}
+	
 	public void removePoints(int catID) {
 		if (points[catID] > 0) {
 			points[catID]--;
@@ -81,6 +88,22 @@ public class Player {
 		
 		sb.append("]");
 		return sb.toString();		
+	}
+	
+	/**
+	 * Determines, if all points in all categories are 3.
+	 * @return True if this player has won the match, false otherwise
+	 */
+	public boolean isWinner() {
+		boolean winner = true;
+		
+		for (int i = 0; i < points.length; i++) {
+			if (points[i] < 3) {
+				winner = false;
+			}
+		}
+		
+		return winner;
 	}
 	
 	@Override

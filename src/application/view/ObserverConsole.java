@@ -133,6 +133,12 @@ public class ObserverConsole implements IObserver {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			
+			if (model.getWinner() != null) {
+				this.getScoreboard();
+				System.out.println("Game is over. " + model.getWinner() + " has won the game!");
+				System.exit(0);
+			}
 		}
 	}
 

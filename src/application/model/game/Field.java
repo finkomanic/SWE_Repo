@@ -22,7 +22,7 @@ public class Field {
 	public void setFigure(Figure figure) {
 		this.figure = figure;
 	}
-
+	
 	/**
 	 * Sets current figure to null -> field gets empty. 
 	 */

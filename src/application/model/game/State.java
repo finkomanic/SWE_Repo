@@ -94,35 +94,35 @@ public enum State {
 	public String toString() {
 		switch (this) {
 		case SET_PLAYERS:
-			return "set amount of players";
+			return "Set amount of players";
 		case FIRST_ROLL:
-			return "first roll";
+			return "First roll";
 		case CHOOSE_FIGURE:
-			return "choose figure";
+			return "Choose figure";
 		case CHOOSE_CATEGORY:
-			return "choose category";
+			return "Choose category";
 		case CHOOSE_OTHER_CATEGORY:
-			return "choose other category";
+			return "Choose other category";
 		case CORRECT_ANSWER:
-			return "correct answer";
+			return "Correct answer";
 		case INCORRECT_ANSWER_COLLIDER:
-			return "incorrect answer collider";
+			return "Incorrect answer collider";
 		case CHOOSE_ANSWER:
-			return "choose answer";
+			return "Choose answer";
 		case FAILURE:
 			return "3 throws, without a 6";
 		case SUCCESS:
-			return "within 3 throws, rolled a 6";
+			return "Within 3 throws, rolled a 6";
 		case SUCCESS_COLLISION:
 			return SUCCESS + ", collision detected";
 		case ASK_QUESTION:
-			return "ask question";
+			return "Ask question";
 		case RELEASE:
 			return "1 throw, rolled a 6";
 		case RELEASE_COLLISION:
 			return RELEASE + ", but collision on starting-field";
 		case MOVE:
-			return "moved figure";
+			return "Moved figure";
 		case MOVE_COLLISION:
 			return MOVE + ", collision";
 		default:

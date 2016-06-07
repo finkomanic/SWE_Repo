@@ -130,4 +130,10 @@ public interface IModel extends ISubject {
 	 * @return Current question and possible answers
 	 */
 	public String getQuestion();
+	
+	/**
+	 * Returns the winner of the match.
+	 * @return The winner, otherwise null
+	 */
+	public Player getWinner();
 }

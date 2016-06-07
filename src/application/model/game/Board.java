@@ -46,7 +46,9 @@ public class Board {
 	 */
 	public Player moveCollisionDetection(int position, int num) {
 		Player ret = null;
-		if (circle[(position + num) % 48].getFigure() != null) {
+		Figure colFigure = circle[(position + num) % 48].getFigure();
+		
+		if (colFigure != null) {
 			ret = circle[(position + num) % 48].getFigure().getOwner();
 		}
 		
@@ -58,7 +60,7 @@ public class Board {
 	 * @param figure Given figure
 	 * @return Field-position
 	 */
-	private Integer getIndex(Figure figure) {
+	private int getIndex(Figure figure) {
 		Integer index = null;
 		for (int i = 0; i < 48; i++) {
 			if (circle[i].getFigure() == figure) {
@@ -66,6 +68,19 @@ public class Board {
 			}
 		}
 		return index;
+	}
+	
+	public int getFigureID(int playerID, int position) {
+		ArrayList<Integer> posis = this.getPositions(playerID);
+		int figID = 0;
+		
+		for (int i = 0; i < posis.size(); i++) {
+			if(posis.get(i) == position) {
+				figID = 1;
+			}
+		}
+		
+		return figID;
 	}
 
 	/**
@@ -100,11 +115,15 @@ public class Board {
 	 * Moves a figure back to starting-field or homebase if it's occupied.
 	 * @param figure Figure to move back
 	 */
-	public void restore(int currentPlayer, int figID) {
-		Figure figure = circle[figID].getFigure();
+	public void restore(int playerID, int figID) {
 		boolean ret = false;
-		if (circle[currentPlayer * 12].getFigure() != null 
-				&& circle[currentPlayer * 12].getFigure().getOwner().getID() == currentPlayer) {
+		int position = getPositions(playerID).get(figID);
+		Figure figure = circle[position].getFigure();
+		circle[position].removeFigure();
+		int id = circle[playerID * 12].getFigure().getOwner().getID();
+				
+		if (circle[playerID * 12].getFigure() != null 
+				&& circle[playerID * 12].getFigure().getOwner().getID() == playerID) {
 			for (int i = 0; i < 3 && !ret; i++) {
 				if (homes[figure.getOwner().getID()][i] == null) {
 					homes[figure.getOwner().getID()][i].setFigure(figure);
@@ -112,8 +131,8 @@ public class Board {
 				}
 			}
 		} else {
-			circle[currentPlayer * 12].setFigure(figure);
-		}
+			circle[playerID * 12].setFigure(figure);
+		}	
 	}
 
 	/**

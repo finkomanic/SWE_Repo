@@ -36,7 +36,7 @@ public class Game {
 	private String possibleAnswers;
 	private String currentAnswer;
 	private String correctAnswer;
-	private int movedFigure;
+	private int collidedFigureID;
 
 	/**
 	 * Constructs a new game.
@@ -48,6 +48,41 @@ public class Game {
 		latestRoll = 0;
 		latestRolls = null;
 		state = State.SET_PLAYERS;
+		
+		/** Testcase */
+		setPlayers(3);
+		
+		// p1
+		board.release(currentPlayer);
+		setNextPlayer();
+		
+		// p2
+		board.release(currentPlayer);
+		setNextPlayer();
+		
+		// p3
+		board.release(currentPlayer);
+		setNextPlayer();	
+		
+		// p1
+		latestRoll = 1;
+		moveFigure(0);
+		
+		// p2
+		latestRoll = 2;
+		moveFigure(0);
+		
+		// p3
+		latestRoll = 1;
+		moveFigure(0);
+		
+		// p1
+		latestRoll = 13;
+		moveFigure(0);
+
+	    this.getCollision().setTestPoints(3, 2, 2, 2);
+		
+		board.release(1);
 	}
 
 	/**
@@ -131,7 +166,7 @@ public class Game {
 			setNextPlayer();
 			state = State.MOVE;
 		} else {
-			movedFigure = i;
+			collidedFigureID = board.getFigureID(collision.getID(), (getPositionsMove().get(i) + latestRoll));
 			state = State.MOVE_COLLISION;
 		}
 	}
@@ -157,7 +192,7 @@ public class Game {
 		if (currentAnswer == correctAnswer)
 		{
 			state = State.CORRECT_ANSWER;
-			board.restore(collision.getID(), movedFigure);
+			board.restore(collision.getID(), collidedFigureID);
 			if (collision.addPoints(currentCategory) == false) {
 				state = State.CHOOSE_OTHER_CATEGORY;
 			}
@@ -248,7 +283,7 @@ public class Game {
 	}
 
 	/**
-	 * Returns the positions of every figure in game, by the current player.
+	 * Returns the positions of every figure on the field, by the current player.
 	 * @return Positions of current players figures
 	 */
 	public ArrayList<Integer> getPositionsMove() {
@@ -297,6 +332,22 @@ public class Game {
 	private void setNextPlayer() {
 		currentPlayer++;
 		currentPlayer %= players.length;
+	}
+	
+	/**
+	 * Returns the winner if there is one already.
+	 * @return The winner or null otherwise
+	 */
+	public Player getWinner() {
+		Player winner = null; 
+		
+		for (Player p : players) {
+			if (p.isWinner()) {
+				winner = p;
+			}
+		}
+		
+		return winner;
 	}
 
 	@Override
